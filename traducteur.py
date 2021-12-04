@@ -4,21 +4,14 @@ import socket
 from os import system, name, path
 import time
 import random
+import pyperclip as pc
+from art import *
 
 
 
 def bannier_traducteur1M():
-    print(Color.green_bold+"""                   
-                ######  ###    ###   ###                ###   ###         ###       #   #     #    #
-                  ##    #  #  #   #  #  #  #   #   ###   #   #   # #   #  #  #     ##   ##   ##    #
-                  ##    ####  #####  #  #  #   #  #      #   ####  #   #  ###     # #   # # # #  #####
-                  ##    # #   #   #  #  #  #   #  #      #   #     #   #  # #       #   #  #  #    #
-                  ##    #  #  #   #  ###    ####   ###   #    ###   ####  #  #     ###  #     #    #
-
-            ###################################################################################################
-           ##################################################################################################
-
-                                  """)
+    print(Color.green_bold)
+    tprint("Codeur  1M+")
 
 
 def code(phrase,key):
@@ -137,7 +130,7 @@ def traducteur_1M():
 
 
     #On demande la phrase à traiter.
-    phrase = raw_input(Color.cyan_bold+"           [?]"+Color.white_bold+" Tapez votre phrase. "+Color.blue_bold)
+    phrase = input(Color.cyan_bold+"           [?]"+Color.white_bold+" Tapez votre phrase. "+Color.blue_bold)
 
 
     #On test la réponse du choix de l'utilisateur / l'utilisatrice.
@@ -151,8 +144,9 @@ def traducteur_1M():
                 key = key + random.choice(choix)
             system('clear')
             bannier_traducteur1M()
-            print(Color.purple_bold+"         [output] "+Color.white_bold+code(phrase,key))
-            fin = raw_input("")
+            print(Color.purple_bold+"         [output] "+Color.white_bold+code(phrase,key)+Color.grey_bold+" (Résultat copié dans le presse-papier)")
+            pc.copy(code(phrase,key))
+            fin = input("")
             return
 
 
@@ -168,8 +162,9 @@ def traducteur_1M():
         if len(phrase) > 0:
             system('clear')
             bannier_traducteur1M()
-            print(Color.purple_bold+"         [output] "+Color.white_bold+decode(phrase, phrase[0:4]))
-            fin = raw_input("")
+            print(Color.purple_bold+"         [output] "+Color.white_bold+decode(phrase, phrase[0:4])+Color.grey_bold+" (Résultat copié dans le presse-papier)")
+            pc.copy(decode(phrase, phrase[0:4]))
+            fin = input("")
             return
 
 

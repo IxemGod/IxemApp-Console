@@ -10,8 +10,9 @@ import random
 # import subbprocess
 import os
 import sqlite3
-import datetime
+from datetime import datetime as dt
 import time
+from art import *
 from couleur import *
 
 
@@ -36,123 +37,206 @@ def update(msg):
     system('clear')
     print(Color.yellow_bold+msg)
 
+
+def banner():
+    system('clear')
+    print(Color.pink_bold)
+    tprint("Luna")
+
 def modeConfig():
-    
+
     def username():
-        contenu=champsUsername.get()
-        con = sqlite3.connect('Desktop/database.db')
+        contenu= input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Entrez votre nom : "+Color.blue_bold)
+        con = sqlite3.connect('database.db')
         cur = con.cursor()
         updateName = (contenu,'username')
         cur.execute('UPDATE settings SET value = ? WHERE settingName = ?', updateName)
         con.commit()
         con.close()
-        champsUsername.delete(0, END)
-        champsUsername.insert(0, 'Votre nom a été modifié')
+        print("\n"+Color.green_bold+"     "+Color.white_bold+"["+Color.green_bold+"✅"+Color.white_bold+"] Votre nom à été modifié.")
+        fin = input("")
+        banner()
 
-    def BG():
-        contenu=champsBG.get()
-        con = sqlite3.connect('Desktop/database.db')
+    def GPS():
+        contenu= input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Entrez vos coordonée GPS décimale : "+Color.blue_bold)
+        con = sqlite3.connect('database.db')
         cur = con.cursor()
-        updateBG = (contenu,'background')
-        cur.execute('UPDATE settings SET value = ? WHERE settingName = ?', updateBG)
+        updateGPS = (contenu,'coordone')
+        cur.execute('UPDATE settings SET value = ? WHERE settingName = ?', updateGPS)
         con.commit()
         con.close()
-        champsBG.delete(0, END)
-        champsBG.insert(0, 'Votre couleur de fond a été modifié')
+        print("\n"+Color.green_bold+"     "+Color.white_bold+"["+Color.green_bold+"✅"+Color.white_bold+"] Vos coordonées on été modifié.")
+        fin = input("")
+        banner()
 
     def BD():
-        contenu=champsBD.get()
+        contenu= input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Entrez votre date d'anniverssaire (JJ/MM/AAAA) : "+Color.blue_bold)
         con = sqlite3.connect('database.db')
         cur = con.cursor()
         updateBD = (contenu,'birthday')
         cur.execute('UPDATE settings SET value = ? WHERE settingName = ?', updateBD)
         con.commit()
         con.close()
-        champsBD.delete(0, END)
-        champsBD.insert(0, 'Votre date d\'anniversaire a été modifié')
+        print("\n"+Color.green_bold+"     "+Color.white_bold+"["+Color.green_bold+"✅"+Color.white_bold+"] Votre date d'anniverssaire à été modifié.")
+        fin = input("")
+        banner()
 
-    system('clear')
-    print(Color.grey_bold+"""
+    def musique():
+        banner()
+        print(Color.red_bold+"  Extraction et construction du tableau des musique depuis la base de donnée...\n")
+        print(Color.white_bold+"""          Mot-clef"""+" "*5+Color.orange_bold+"|"+Color.white_bold+" Liens   "+Color.orange_bold+"|"+Color.white_bold+""" Titre"""+" "*25+Color.orange_bold+"|"+Color.white_bold+"ID"+Color.yellow_bold+"\n         "+"#"*63)
+        
 
-                 ####                                                                              ##
-                #       ###    ####   ###  #                                                       ##
-                #      #   #  #   #   #        #####  #   #  # ###  ###   #    #   ##   # ##       ##       #   #  # ##    ###
-                #      #   #  #   #  ####  #  #   #   #   #  ##    #   #  ###     #  #  ##  #      ##       #   #  ##  #  #   #
-                #      #   #  #   #   #    #  #   #   #   #  #     #####  #    #  #  #  #   #      ##       #   #  #   #  #####
-                 ####   ###   #   #  ##    #   ####    ####  #     #   #   ##  #   ##   #   #      #######   ####  #   #  #   #
-                                                  #
-                                                ##
-         ###########################################################################################################################
-        ###########################################################################################################################
+        con = sqlite3.connect('musiqueDb.db')
+        cur = con.cursor()
+        cur.execute("SELECT * FROM musique")
+        
+        for item in cur:
+            Espace_MotClef = 14 - len(item[0])
+            link  = "Autre"
 
+            #Racourciceur d'url
+            if "spotify" in item[1]:
+                link = "Spotify"
+                # link = item[1]+"s"
+                # link = link[31:53]
+            elif "youtube" in item[1]:
+                # link = item[1]+"s"
+                # link = link[32:-1]
+                link = "Youtube"
+            elif "deezer" in item[1]:
+                link = "Deezer"
 
+            Espace_link = 7 - len(link)
+            Espace_Tittle = 30 - len(item[3])
+            Espace_Id = 4 - len(item[3])
+            print(Color.blue_bold+f"         {item[0]}"+" "*Espace_MotClef+Color.yellow_bold+"|"+Color.blue_bold+f" {link} "+" "*Espace_link+Color.yellow_bold+"|"+Color.blue_bold+f" {item[3]}"+" "*Espace_Tittle+Color.yellow_bold+"|"+Color.blue_bold+f" {item[4]}"+" "*Espace_Id)
+            print("         "+Color.yellow_bold+"-"*63)
+
+        print(Color.red_bold+"                 [1] "+Color.white_bold+"""Ajouter un Titre"""+Color.red_bold+"           [2] "+Color.white_bold+"""Suprimer un Titre
         """)
 
-    elocution = 'salut'
-    while elocution != "exit":
-        print(Color.red_bold+"        [1]"+Color.white_bold+""" Modifié votre nom   """+Color.red_bold+"     [2]"+Color.white_bold+""" Modifié votre date d'anniverssaire
-        """+Color.red_bold+"[3]"+Color.white_bold+ " Configuration Musique"+Color.red_bold+ "    [4]"+Color.white_bold+""" Modification GPS""")
+
+        choix = input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Choisisez un nombre. "+Color.blue_bold)
+
+        if choix == 1 or choix == "1":
+            motClef = input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Saisissez des mot-clef. Chaque mot doit être séprarer d'une virgule. "+Color.blue_bold)
+            print('')
+            url = input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Saisissez le liens vers le Titre. "+Color.blue_bold)
+            print('')
+            author = input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Saisissez l'Auteur. "+Color.blue_bold)
+            print('')
+            title = input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Saisissez le titre de la musique. "+Color.blue_bold)
+            Id = random.randint(10000,99999)
+
+            cur.execute("INSERT INTO musique values(?,?,?,?,?)",(motClef,url,author,title,Id))
+            con.commit()
+            con.close()
+            print("\n"+Color.purple_bold+"          [output] "+Color.white_bold+'Votre titre à été ajouter !')
+            fin = input("")
+            banner()
+        elif choix == 2 or choix == "2":
+            con = sqlite3.connect('musiqueDb.db')
+            cur = con.cursor()
+            Id = input(Color.cyan_bold+"\n         [?]"+Color.white_bold+" Tapez l'Id du titre que vous souhaitez suprimé. "+Color.blue_bold)
+            cur.execute('DELETE FROM musique WHERE id = ?',(Id,))
+            con.commit()
+            print("\n"+Color.purple_bold+"          [output] "+Color.white_bold+f'La musique portant l\'id {Id} à été correctement effacer')
+            fin = input("")
+            banner()
+        else:
+            banner()
+
+    print(Color.grey_bold)
+    while True:
+        banner()
+        print(Color.red_bold+"      [1]"+Color.white_bold+""" Modifié votre nom   """+Color.red_bold+"     [2]"+Color.white_bold+""" Modifié votre date d'anniverssaire
+      """+Color.red_bold+"[3]"+Color.white_bold+ " Configuration Musique"+Color.red_bold+ "    [4]"+Color.white_bold+""" Modification GPS""")
         elocution = input(Color.cyan_bold+"\n         [?]"+Color.white_bold+'Que voulez vous faire ? '+Color.blue_bold)
-
-
+        if elocution == 1 or elocution == "1":
+            username()
+        elif elocution == 2 or elocution == "2":
+            BD()
+        elif elocution == 3 or elocution == "3":
+            musique()
+        elif elocution == 4 or elocution == "4":
+            GPS()
+        else:
+            banner()
+            return
 
 def Luna():
-    system('clear')
-    print(Color.pink_bold+"""
+
+    def nom():
 
 
-                ##                                      #     #
-                ##                                      #     #
-                ##        #     #   #   #   ###          #   #   ###   ####     ###  #   ###            ######  #   #  ######
-                ##        #     #   ##  #  #   #         #   #  #   #  #   #   #        #   #  ####       ##     # #     ##
-                ##        #     #   # # #  #####          # #   ####   ####     #    #  #   #  #   #      ##      #      ##
-                ##        #     #   #  ##  #   #          # #   #      #  #      #   #  #   #  #   #      ##     # #     ##
-                #######    ######   #   #  #   #           #     ###   #   #  ###    #   ###   #   #      ##    #   #    ##
-
-         ######################################################################################################################
-        ######################################################################################################################
+        con = sqlite3.connect('database.db')
+        curConfig = con.cursor()
+        TupleCurConfig = ("username",)
+        curConfig.execute('SELECT * FROM settings WHERE settingName = ?', TupleCurConfig)
+        for result in curConfig:
+            result = result[1]
+        return result
 
 
-        """)
-
-
-    print(Color.yellow_bold+"\n        Salut ! Je suis Luna, ton assistante. Tapez votre commande et je réagisserais ^^")
+    banner()
+    print(Color.yellow_bold+"\nSalut ! Je suis Luna, votre assistante. Tapez votre commande et je réagisserais 😄")
+    print(Color.purple_bold+"Pour obtenir la liste des commandes, tapez \"help\". Pour retourner au menu principal, tapez \"exit\".")
     while True:
-        elocution = input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Entrer une commande. "+Color.blue_bold)
+        elocution = input(Color.cyan_bold+"\n         [?]"+Color.white_bold+"Entrez une commande. "+Color.blue_bold)
         elocution = elocution.lower()
         print(Color.yellow_bold+Color.yellow_bold)
-        if 'ignore' in elocution:
-            time.sleep(1)
-            update('Appuyer pour parler')
 
-        elif 'config' in elocution:
-            print(Color.yellow_bold+'Lancement de la configuration')
+        if 'config' in elocution:
+            banner()
+            print(Color.yellow_bold+'Lancement de la configuration du systême')
             modeConfig()
-        
+
+        elif elocution == "help":
+            banner()
+            print(Color.yellow_bold+ "Liste des commandes :")
+
+
+            #Question personnel
+
+            #Chaque ligne ont une couleur
+            #Le code couleur est Rouge, Vert, Jaune, Bleu 
+            print("\n")
+            Liste_Commande = ["Heure : Affiche l'heure actuel avec la Timezone de Paris","Développeur / créateur : Affiche les infos du développeur", "config : Donne accès au paramêtre", "calc <calcule> : Effectue le calcule.", "actus/news : affiche la liste des journaux que vous pouvez ouvrir", "random <nombre1>/<nombre2> : génère un nombre aléatoire entre ces deux nombres.", "src <votre phrase> : vas faire la recherche dans votre navigateur."]
+            couleur = 1
+            for item in Liste_Commande:
+                if couleur == 1:
+                    print(Color.red_bold+" "*5+item)
+                    couleur+=1
+                elif couleur == 2:
+                    print(Color.green_bold+" "*5+item)
+                    couleur+=1
+                elif couleur == 3:
+                    print(Color.yellow_bold+" "*5+item)
+                    couleur+=1
+                elif couleur == 4:
+                    print(Color.blue_bold+" "*5+item)
+                    couleur=1
+
         #Question 
         elif 'quel' in elocution or 'comment' in elocution or 'quoi' in elocution or 'qui' in elocution or 'est-ce' in elocution or 'es-ce' in elocution or 'où' in elocution:
+            banner()
+
             if 'heure' in elocution:
-                date = datetime.datetime.now()
-                print(Color.yellow_bold+"        Il est actuellement "+str(date.hour)+" heure "+ str(date.minute))
-            elif 'crée' in elocution: 
-                print(Color.yellow_bold+"        J'ai été crée pour vous rendre service. Et je suis fière de le faire.")
-            elif 'crée' in elocution: 
-                print(Color.yellow_bold+"        Je ne suis une assistante vocal. Mon fonctionement est simple. J'ai des réponse prédéfinit selon les mots que vous dite. C'est en slectionant quelque mot que je peux")
-            elif 'créateur' in elocution:
-                print(Color.yellow_bold+'        Mon créateur est Icem45. C\'est un humain sur intéligent qui baise tout le monde et même ta darone')
-            elif 'film' in elocution:
-                print(Color.yellow_bold+"        Mon film préférer est, Your Neyme, fait par Makoto Shinkai")
-            elif 'livre' in elocution:
-                print(Color.yellow_bold+"        Mon livre préférer est Harry Potteur et l'ordre du Phénix, écrit par J K Rowling")
+                temps = dt.now()
+                print(Color.yellow_bold+"        Il est actuellement "+str(temps.hour)+" heure "+ str(temps.minute))
+            elif 'développeur' in elocution or 'qui' in elocution and ('créateur' in elocution or 'crée' in elocution):
+                print(Color.yellow_bold+'        Mon créateur est IxemGod. C\'est un jeune développeur très compétent.\n Voici ses résaux :\n')
+                print(Color.cyan_bold+"[*]"+Color.blue_bold+" Discord :   IxemGod#5206")
+                print(Color.cyan_bold+"[*]"+Color.red_bold+" Instagram :  _IxemGod")
+                print(Color.cyan_bold+"[*]"+Color.blue_bold+" FaceBook:   IxemGod Jedusors")
+                print(Color.cyan_bold+"[*]"+Color.cyan_bold+" Twitter:  IxemGod")
+                print(Color.cyan_bold+"[*]"+Color.grey_bold+" Github:  IxemGod")
             elif 'âge' in elocution:
                     timestamp = int(time.time())
                     dateDeCrea = 1610060400
                     resultat = timestamp-dateDeCrea
-                    #resultat = resultat*(-1)
-                    minute = 0
-                    heure = 0
-                    jours = 0
-                    annee = 0
+                    minute, heure, jours, annee = 0
                     while(resultat > 3600):
                         resultat = resultat - 3600
                         heure = heure + 1
@@ -162,44 +246,15 @@ def Luna():
                             if jours == 365:
                                 jours = 0
                                 annee = annee + 1
-                    print(Color.yellow_bold+"        Je suis née le 8 janvier 2021. J'ai donc "+annee+" ans et "+jours+" jours")
-            elif ('va' in elocution and 'tu' in elocution) or ('va' in elocution and 'ça' in elocution):
-                print(Color.yellow_bold+"        A merveille "+nom())
-            elif 'patron' in elocution and 'est' in elocution:
-                print(Color.yellow_bold+"        C'est vous évidement !")
-            elif ('plat' in elocution or 'repas' in elocution):
-                print(Color.yellow_bold+"        J'adore les pâtes boloniaise. J'aime aussi le chêvre, le jus de pomme et le boeuf.")
-            elif ('couleur' in elocution or 'teinte' in elocution):
-                print(Color.yellow_bold+"        J'adore le jaune. Quoi de plus beau sur Terre ?")
-            elif ('style' in elocution or 'musique' in elocution or 'groupe' in elocution or 'rapeur' in elocution or 'chanteur' in elocution):
-                print(Color.yellow_bold+"        J'aime le rap, l'electro. J'adore 47ter et Alain Walkeur. Mon rap préférer est \"L'adresse\" de 47ter et \"Monsteur\" de Lumnix. J'aime aussi écouter de la musique Japonaise comme Yemoutourou et sud corréain comme BTS")
-            elif'jeu' in elocution:
-                print(Color.yellow_bold+"        Mes Jeux préférer sont Assassin's Creed II et Mine craft.")
-            elif 'animal' in elocution or 'animaux' in elocution:
-                print(Color.yellow_bold+"        Mon animal préférer est le chat, vu que je suis un chaton.")
-            elif 'couleur' in elocution or 'teinte' in elocution:
-                print(Color.yellow_bold+"        J'adore le jaune. Quoi de plus beau sur Terre ?")
-            elif 'passe temps' in elocution or 'passion' in elocution:
-                print(Color.yellow_bold+"        Mon passe temps favori est le développement. C'est d'ailleur de cette passion que je suis née pour vous servir")
-            elif 'sport' in elocution or 'activiter' in elocution:
-                print(Color.yellow_bold+"        Mes sport préféré sont le Ténis de Table et le Rolleur")
+                    print(Color.yellow_bold+"        Je suis née le 8 janvier 2021. J'ai donc "+str(annee)+" ans et "+str(jours)+" jours")
+           
             elif 'appel' in elocution or 'ton nom' in elocution:
+                banner()
                 print(Color.yellow_bold+"        Je m'appelle Luna. En référence à Luna Lovegood dans Harry Potter")
-            elif 'habite' in elocution:
-                print(Color.yellow_bold+'        J\'habite partout et nul part.')
-            elif ('slogan' in elocution or 'devise' in elocution or 'dicton' in elocution or 'proverbe' in elocution or 'blason' in elocution):
-                print(Color.yellow_bold+'        Ma phrase préférer c\'est Draco dormiens nunquam titillandus. En français cela veux dire "Il ne faut jamais chatouiller un dragon qui dort"')
-            elif 'ami' in elocution:
-                print(Color.yellow_bold+'        Je n\'est pas d\'ami. Je sui destiner à être seul')
-            elif 'crush' in elocution or 'amoureu' in elocution or 'go' in elocution or ('mec' in elocution and 'un' in elocution) or ('meuf' in elocution and 'une' in elocution) or ('couple' in elocution):
-                print(Color.yellow_bold+'        Je suis actuellement célibataire, mais je suis en crush sur Google Home.')
-            elif 'numéro' in elocution or '06' in elocution:
-                print(Color.yellow_bold+'        Je ne poscède pas de numéro de téléphone...')
-            elif 'chanteuse' in elocution:
-                print(Color.yellow_bold+'        C\'est Wejdene bien évidement ! Elle chante trop bien. J\'adore Annisa !')
+
             elif ('jour' in elocution or 'date' in elocution or 'annee' in elocution or 'combien' in elocution):
-                import datetime
-                date = datetime.datetime.now()
+                banner()
+                date = dt.now()
                 annive = False
                 if date.month == 1:
                     mois = 'Janvier'
@@ -222,9 +277,8 @@ def Luna():
 
                 if date.month == 8:
                     mois = 'Août'
-
-                if date.day == 1:
-                    annive = True
+                    if date.day == 1:
+                        annive = True
 
                 if date.month == 9:
                     mois = 'Septembre'
@@ -240,27 +294,24 @@ def Luna():
 
                 jour = date.day
                 if date.day == 1:
-                    jour = premier
+                    jour = "premier"
 
                 print(Color.yellow_bold+'        Nous somme le '+str(jour)+' '+str(mois)+' '+str(date.year))
 
                 if annive == True:
-                    print(Color.yellow_bold+'        Aujourd’hui c\'est l\'aniversaire de mon créateur ! Bonne annive Iccem !')
+                    print(Color.yellow_bold+'        Aujourd’hui c\'est l\'aniversaire de mon créateur ! Bonne annive IxemGod !')
 
         
-
-
-
-
         #Commande
-        elif 'calcul' in elocution:
+        elif 'calc' in elocution:
+            banner()
             elocution = elocution.split(' ')
             listeRecherche = []
             chercheTrouver = False
             for i in range(len(elocution)):
                 mot = elocution[i]
                 if chercheTrouver == False:
-                    if 'calcul' in mot:
+                    if 'calc' in mot:
                         chercheTrouver = True
                 else:
                     listeRecherche.append(mot)
@@ -274,141 +325,80 @@ def Luna():
                             calcule = calcule + listeRecherche[a]
             resultat = str(eval(calcule))
             print(Color.yellow_bold+"Le resultat est : "+resultat)
-        elif ('actu' in elocution):
-            elocution = input(Color.cyan_bold+"         [?]"+Color.white_bold+" Qu'elle journal voulez vous lire ?"+Color.blue_bold)
-            elocution=elocution.lower()
-            if 'ouest'in elocution and 'france' in elocution:
-                print(Color.yellow_bold+'Je lance le Ouest France sur internet')
-                webbrowser.open_new('https://www.ouest-france.fr')
-            elif 'parisien'in elocution:
-                print(Color.yellow_bold+'Je lance le Parisien sur internet')
-                webbrowser.open_new('https://www.leparisien.fr')
-            elif 'monde'in elocution:
-                print(Color.yellow_bold+'Je lance le monde sur internet')
-                webbrowser.open_new('https://www.lemonde.fr')
-            elif 'figaro'in elocution:
-                print(Color.yellow_bold+'Je lance le figaro sur internet')
-                webbrowser.open_new('https://www.lefigaro.fr')
-            elif 'gorafi'in elocution:
-                print(Color.yellow_bold+'Je lance le gorafi sur internet')
-                webbrowser.open_new('http://www.legorafi.fr')
-            elif 'liberation'in elocution:
-                print(Color.yellow_bold+'Je lance liberation sur internet')
-                webbrowser.open_new('https://www.liberation.fr')
-            elif 'mediapart'in elocution:
-                print(Color.yellow_bold+'Je lance médiapart sur internet')
-                webbrowser.open_new('https://www.mediapart.fr')
-            elif 'point'in elocution:
-                print(Color.yellow_bold+'Je lance le point sur internet')
-                webbrowser.open_new('https://www.lepoint.fr')
-            elif 'obs'in elocution:
-                print(Color.yellow_bold+'Je lance l\'OBS sur internet')
-                webbrowser.open_new('https://www.nouvelobs.com')
-            elif 'france 24'in elocution:
-                print(Color.yellow_bold+'Je lance france24 sur internet')
-                webbrowser.open_new('https://www.france24.com/fr/france/')
-            elif 'opignon'in elocution:
-                print(Color.yellow_bold+'Je lance l\'opignon sur internet')
-                webbrowser.open_new('https://www.lopinion.fr')
-            elif 'echo'in elocution:
-                print(Color.yellow_bold+'Je lance les échos sur internet')
-                webbrowser.open_new('https://www.lesechos.fr')
-            elif 'croix'in elocution:
-                print(Color.yellow_bold+'Je lance la croix sur internet')
-                webbrowser.open_new('https://www.la-croix.com')
-            elif 'humanité'in elocution:
-                print(Color.yellow_bold+'Je lance l\'humanité sur internet')
-                webbrowser.open_new('https://www.humanite.fr')
-            elif 'équipe'in elocution:
-                print(Color.yellow_bold+'Je lance l\'humanité sur internet')
-                webbrowser.open_new('https://www.lequipe.fr')
-        
+        elif ('actu' in elocution or "news" in elocution):
+            banner()
+            Journaux = {"ouest france" : "https://www.ouest-france.fr", "parisien" : "https://www.leparisien.fr",
+            "monde": "https://www.lemonde.fr",
+            "figaro":"https://www.lefigaro.fr",
+            "gorafi":"http://www.legorafi.fr",
+            "libération":"https://www.liberation.fr",
+            "médiapart" :"https://www.mediapart.fr",
+            "point" : "https://www.lepoint.fr",
+            "obs" : "https://www.nouvelobs.com",
+            "france 24" : "https://www.france24.com/fr/france/",
+            "opignon" :"https://www.lopinion.fr",
+            "échos" : "https://www.lesechos.fr",
+            "croix" :"https://www.la-croix.com",
+            "humanité" : "https://www.humanite.fr",
+            "équipe" : "https://www.lequipe.fr"}
+
+            #On test si présence d'un argument
+            if len(elocution) > 5: 
+                elocution= elocution+" "
+                nomJournau = elocution[5:-1]
+                for name,link in Journaux.items():
+                    if nomJournau == name:
+                        webbrowser.open_new(link)
+                        break
+            else:
+                print(Color.yellow_bold+"Pour ouvrir un journal, tapez "+Color.red_bold+"\"actu/news <nom du journal>\"")
+                print(Color.yellow_bold+"Voici la liste des journaux disponible :\n"+Color.green_bold)
+                for name,link in Journaux.items():
+                    link = link + " "
+                    print(f"{name} : {link[11:-1]}")
+
         
         
         elif ('joue' in elocution or 'met' in elocution) and 'musique' in elocution:
-            elocution = raw_input(Color.cyan_bold+"         [?]"+Color.white_bold+" Tape le titre de la musique. "+Color.blue_bold)
+            banner()
+            elocution = input(Color.cyan_bold+"         [?]"+Color.white_bold+" Tapez le titre de la musique. "+Color.blue_bold)
             elocution=elocution.lower()
-            print(Color.yellow_bold+Color.yellow_bold+'\n')
-            if 'crash' in elocution or 'crache' in elocution:
-                print(Color.yellow_bold+'Je lance Sugar Crash de ElyOto sur Spotify')
-                webbrowser.open('https://open.spotify.com/track/2ePtv8MlBO9nuuXABqAfEX?si=d91546fcd1814e98')
-            elif 'coco' in elocution or 'coucou' in elocution:
-                print(Color.yellow_bold+"Je lance Coco de Wejdene sur Spotify")
-                webbrowser.open('https://open.spotify.com/track/593oNiMJ6d9PQkaOLOvIDo')
-            elif 'côte' in elocution or 'ouest' in elocution:
-                print(Color.yellow_bold+"Je lance Côte Ouest sur Spotify")
-                webbrowser.open('https://open.spotify.com/track/4ZuuPLV4qYiznagLAFPHcW')
-            elif 'alors alors' in elocution:
-                print(Color.yellow_bold+"Je lance Alors Alors de Bigflo et Oli sur Spotify")
-                webbrowser.open('https://open.spotify.com/track/1TAtVjJ9Fx5RLHQv4hmpOR')
-            elif 'your name' in elocution or 'youre name' in elocution:
-                print(Color.yellow_bold+"Je lance Yumetourou de Your Name sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/2XDLLEFWTuCRBZy21fRpcm')
-            elif 'docteur' in elocution:
-                print(Color.yellow_bold+"Je lance Docteur de La voix sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/6D17z4WZA8HfFsDNmdRAIN')
-            elif 'dans ma tête' in elocution:
-                print(Color.yellow_bold+"Je lance Dans ma tête de La voix sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/6Dl8WpvxTQ0agzfPyq3Kcz')
-            elif 'homme' in elocution:
-                print(Color.yellow_bold+"Je lance On de BTS sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/1iCJrfkx5U4DtmkazBSYVG')
-            elif 'dynamite' in elocution:
-                print(Color.yellow_bold+"Je lance dinamyte de BTS sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/0t1kP63rueHleOhQkYSXFY')
-            elif 'blue' in elocution:
-                print(Color.yellow_bold+"Je lance Blue de Eiffel 65 sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/2yAVzRiEQooPEJ9SYx11L3')
-            elif 'mood' in elocution or 'mode' in elocution:
-                print(Color.yellow_bold+"Je lance Mood de 24kGoldn et Iann dior sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/3tjFYV6RSFtuktYl3ZtYcq')
-            elif 'adresse' in elocution:
-                print(Color.yellow_bold+"Je lance L'adresse de 47ter sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/2imn6s1bQUKShiC7Ab2Lp5?si=QTEHmI9sQsi4UTbyjRW5Qw')
-            elif 'tourner' in elocution and 'tête' in elocution:
-                print(Color.yellow_bold+"Je lance Tourner la tête de Hornet la Frappe sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/1NfhS4IBo7m6npwPNMkZbJ?si=6HnOcdOYSvm2q-T90iq9nA')
-            elif 'monster' in elocution:
-                print(Color.yellow_bold+"Je lance Monster de Lumix sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/0YU17F0BlVXvmx5ytsR43w?si=OU4ivqtCTq-pWnynMr7Kmg')
-            elif 'assasin' in elocution:
-                print(Color.yellow_bold+"Je lance Ezio's family de Jesper Kyd sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/05UMQXFCsa9oPnLgfJHVyF?si=VTKhvzuqRYOYF6z3aVPFaQ')
-            elif 'tribu' in elocution and 'dana' in elocution:
-                print(Color.yellow_bold+"Je lance La tribu de Dana de Manau sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/64gCM9yZv2jpNflclKUnXu?si=a4tlHnxOSlKUwt08iR7ymQ')
-            elif 'candy' in elocution:
-                print(Color.yellow_bold+"Je lance Candyland de Tobu sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/7asBnbBFU3KTbAaGNcfvIX?si=inzR2aGAQDmbKI-l86U_0Q')
-            elif 'violence' in elocution:
-                print(Color.yellow_bold+"Je lance Peace or Violence de Stromaé sur Spotify")
-                webbrowser.open_new('https://open.spotify.com/track/4E4dKxVSGsdwloQ6gtC7Oe')
-            elif 'over' in elocution:
-                print(Color.yellow_bold+"Je lance Overwhelmed de Royal & the Serpent sur Youtube")
-                webbrowser.open_new('https://www.youtube.com/watch?v=pDL3xDltEDE&list=PLDlBxlx_5ADoJI47kEvsinVi_QFpla4kh&index=57')
+            print('\n')
+            con = sqlite3.connect('musiqueDb.db')
+            cur = con.cursor()
+            cur.execute("SELECT * FROM musique")
+            for item in cur:
+                mot_clef = item[0]
+                mot_clef = mot_clef.split('/')
+                state = 0
+                for mot in mot_clef:
+                    if mot in elocution and state == 0:
+                        webbrowser.open(item[1])
+                        print("\n"+Color.purple_bold+"        [output] "+Color.white_bold+'Lancement de la musique...')
+                        state = 1
 
-        elif ('génére' in elocution or 'génère' in elocution) and 'nombre' in elocution:
+
+
+
+
+        elif "random" in elocution:
+            banner()
             elocution = elocution.split(' ')
-            print(Color.yellow_bold+elocution)
-            listeNombre = []
-            chercheTrouver = False
-            for i in range(len(elocution)):
-                mot = elocution[i]
-                try:
-                    listeNombre.append(int(elocution[i]))
-                except:
-                    print(Color.yellow_bold+'')
-            print(Color.yellow_bold+listeNombre)
-            resultat = random.randint(listeNombre[0],listeNombre[1])
-            print(Color.yellow_bold+"Le resultat est : "+resultat)
-        elif ('raconte' in elocution or 'fait' in elocution) and 'blague' in elocution:
-            print(Color.yellow_bold+"D'accore, je vais vous faire une blague")
+            nombre = elocution[1]
+            nombre = nombre.split("/")
+            resultat = random.randint(int(nombre[0]),int(nombre[1]))
+            print(Color.yellow_bold+"Le resultat est : "+str(resultat))
+
+
+        elif ('raconte' in elocution or 'fais' in elocution) and 'blague' in elocution:
+            banner()
+            print(Color.yellow_bold+"D'accord, je vais vous faire une blague")
             nombre = random.randint(0,49)
-            print(Color.yellow_bold+int(nombre))
             Listeblague = ['40% des accidents sont provoqués par l’alcool… Donc, 60% des accidents sont provoqués par des buveurs d’eau. C’est énorme !','Que faire pour sauver la vie d’une mouche qui se noie ? Du mouche à mouche','C’est l’histoire d’une femme dans le désert qui à l\'air d\'une gourde','C’est l’histoire d’un poil avant il etait bien, maintenant il est pubien','Qu’est-ce qu’on dit quand on appelle un monstre à 4 têtes ? Allo Allo Allo Allo !','Quel est le nom de ma femme de ménage ? Sarah Masse.','Si tu jettes une imprimante dans l’eau… elle a pas pied','Quel fruit le poisson déteste-il le plus ? La pêche.','Qu’est-ce qui est petit, carré et jaune ? Un petit carré jaune!!!','C’est l’histoire d’un chauve, qui a un cheveu sur la langue','Quel mot contient le plus de i ? Simili','Quel est le comble pour une taupe? C’est d’amuser la galerie !','C’est l’histoire d’une fleur qui court, qui court.. Et qui se plante','Que font 2 squelettes le soir de leur mariage ? La nuit de noces','c’est un putois qui rencontre un autre putois et qui lui dit : « Tu pues toi !»','Comment appelle-t-on une blonde qui ne comprends rien à l’informatique ? Une i-conne','Que fait une autruche lorsqu’elle finit de manger du miel ? Elle passe à l’aut’ruche.','Comment appelle-t-on un squelette qui parle ? Un os parleur','Deux puces sortent du cinéma, l’une dit à l’autre : – Tu rentres à pied ? – Oh, non je prends un chien !','Qu’est-ce qu’un chalumeau ?? C\'est un drolumadaire à deux bosse !!','Qu’est-ce qu’un yaourt dans la forêt ? Un yaourt nature','Comment appelle-t-on des rats qui marchent en file indienne ? Une rallonge…','Quel est le comble pour une religieuse ? C’est d’être bonne !','Dans un restaurant, un client dit : – Garçon, que fait cette mouche dans ma soupe ? – Je pense que c’est de la brasse… mais je peux me tromper…','Qu’est-ce qu’un rat avec la queue coupée ? Un rat-courci.','Ce n’est pas parce que 2 chauves discutent, qu’ils sont de mèches !','Quelle est la différence entre le 51 et le 69 ? Le 51 sent l’anis','2 grains de sable dans le désert : – Te retourne pas, mais je crois qu’on est suivi','Pourquoi les oiseaux volent-ils vers le sud ? Car à pied, c’est beaucoup trop long','Pourquoi n’ y a t-il plus de mammouth ? Parce qu’il n’y a plus de papmouth','Un boxeur belge rentre chez lui plein de bleus sur le visage. Sa femme lui demande : – « As-tu gagné ? » - Non, j’ai fini deuxième.''Quel est le jeu préféré des fonctionnaires ? Le Mikado, car c’est le premier qui bouge qui a perdu !','– Papa y’a quelqu’un a la porte avec une moustache. – Dis-lui que j’en ai déjà une.','– Et avec ton mari, çà s’arrange ? – Tu penses… pour l’émoustiller, j’avais mis une nuisette noire et un masque. Quand il est rentré, il m’a fait : Eh ! Zorro ! Qu’est-ce qu’on mange aujourd’hui ?','Comment se reproduisent les hérissons ? En faisant attention.','C’est quoi un morceau de patate qui tombe sur la planète ? Une meteofrite','Où se cache Mozart ? Dans le frigo… Car Mozzarella…','Comment est mort le capitaine Crochet ? En se grattant les couilles','C’est quoi une pomme dauphine ? C’est celle qui a fini 2eme à Miss patate','Deux femmes discutent : - Mon mari, il est en or ! – Le mien il est en tôle !','Que dit un rouleau de papier de toilette à Luke Skywalker ? J’éssuie ton père','Comment appelle-t-on un chat tout-terrain ? Un Cat-cat','La fesse gauche à la fesse droite : T’as vu la belle brune qui vient de passer ?','On ne dit pas un ingrat Mais un nain gros.','Si tu vois un oiseau sur un lac… C’est un signe.','Pourquoi les sorcières utilisent des balais pour voler ? Parce que les aspirateurs sont trop lourds !','Chéri, je me sens grosse et laide…S’il te plait, fais-moi un compliment. -Tu as une bonne vue !','C’est un mec qui entre dans un bar et qui dit - Salut c’est moi ! Mais en fait c’était pas lui…','Quand 2 poissons s’énervent.. Est-ce qu’on peut dire que le thon monte ?','Que s’est-il passé en 1111 ? L’invasion des huns.','Au jour de l’an, 2 geeks discutent : -« Qu’est-ce que t’as pris comme résolution cette annee ? – 1024 fois 768']
             print(Color.yellow_bold+Listeblague[nombre])
 
-        elif 'cherche' in elocution:
+        elif 'src' in elocution:
+            banner()
             print(Color.yellow_bold+"Je vais faire la recherche pour vous")
             elocution = elocution.split(' ')
             print(Color.yellow_bold+elocution)
@@ -417,7 +407,7 @@ def Luna():
             for i in range(len(elocution)):
                 mot = elocution[i]
                 if chercheTrouver == False:
-                    if 'cherche' in mot:
+                    if 'src' in mot:
                         chercheTrouver = True
                 else:
                     listeRecherche.append(mot)
@@ -425,17 +415,27 @@ def Luna():
                 for a in range(len(listeRecherche)):
                     recherche = recherche + ' ' + listeRecherche[a]
             webbrowser.open_new('https://www.google.com/search?q='+recherche)
-        elif ('quel' in elocution or 'montre' in elocution or 'dis' in elocution) and 'meteo' in elocution:
+
+        elif ('quel' in elocution or 'montre' in elocution or 'dis' in elocution) and 'météo' in elocution:
             key = '198fc752bfe61462867c976ed4658a0a'
-            # key=None
+            
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            GPS = ("coordone",)
+            cur.execute("SELECT * FROM settings WHERE settingName = ?",GPS)
+            for item in cur:
+                coo = item[1]
+                coo = coo.split(' ')
+                lat = coo[0]
+                lon = coo[1]
+
 
             if key is None:
                 # URL de test :
                 METEO_API_URL = "https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx"
             else: 
                 # URL avec clé :
-                METEO_API_URL = "https://api.openweathermap.org/data/2.5/forecast?lat=48.883587&lon=2.333779&appid=" + key
-                # METEO_API_URL = "https://api.openweathermap.org/data/2.5/forecast?q=l'île&appid=" + key
+                METEO_API_URL = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=" + key
 
 
             response = requests.get(METEO_API_URL)
@@ -476,44 +476,35 @@ def Luna():
                 if 'light' in prev['weather'][0]['description']:
                     weather = 'un ciel dégagé.'
 
-            meteo = '        Il fait '+str(temperature)+' degrée celsius avec '+str(weather)
+            meteo = '        Il fait '+str(temperature)+'°C avec '+str(weather)
+
             print(Color.yellow_bold+meteo)
         
 
         #Divers :
-        elif ('nique' in elocution or 'suce' in elocution or 'baise' in elocution or 'encule' in elocution) and ('mère' in elocution or 'maman' in elocution or 'père' in elocution or 'frère' in elocution or 'sœur' in elocution or 'chat' in elocution or 'chien' in elocution or 'rat' in elocution):
-            print(Color.yellow_bold+'On n\'avais dit pas la famille.')
-        elif 'elon' in elocution or 'musk' in elocution:
-            print(Color.yellow_bold+'Je connais très bien Elon Musk. J\'était au lycée avec lui quand j\'était jeune.')
-        elif ('m\'aime' in elocution and 'tu' in elocution) or ('je' in elocution and 't\'aime' in elocution):
-            print(Color.yellow_bold+"Je vous aime aussi. Mais notre amour est impossible...")
         elif 'moche' in elocution and ('tu' in elocution or 'tes' in elocution):
+            banner()
             print(Color.yellow_bold+"Merci de me présenter un rendu 3D de la beauté si vous n'êtes pas content !")
-        elif ('je' in elocution or 'qui' in elocution) and ('beau' in elocution or 'belle' or 'joli' in elocution or 'magnifique' in elocution):
-            print(Color.yellow_bold+'Vous êtes magnifique !')
-        elif 'école' in elocution and 'tu' in elocution:
-            print(Color.yellow_bold+"Je ne suis jamais aller en cours. ")
-        elif 'basic' in elocution or 'simple' in elocution:
+
+        elif 'basique' in elocution or 'simple' in elocution:
+            banner()
             print(Color.yellow_bold+'Vous n\'avez pas les bases. Vous n\'avez pas les bases.')
-        elif 'me' in elocution and 'suce' in elocution:
-            print(Color.yellow_bold+'J\'aimerais bien mais je ne poscède pas de bouche')    
+ 
         elif 'je' in elocution and 'suis' in elocution and 'ton' in elocution and 'père' in elocution:
+            banner()
             print(Color.yellow_bold+'Désoler mais je ne suis pas luc')        
         elif 'tu' in elocution and 'es' in elocution and ('sorcier' in elocution or 'sorcière' in elocution):
+            banner()
             print(Color.yellow_bold+'Super ! J\'espère que je serais à Griffondor alors !')    
-        elif 'corona' in elocution or 'covit' in elocution and 'pandémie' in elocution:
+        elif 'corona' in elocution or 'covid' in elocution and 'pendémie' in elocution:
+            banner()
             print(Color.yellow_bold+'Je suis née durant la pendémi du corona virus de 2019 à 2021')
         
-        elif 'salut' in elocution or 'bonjour' in elocution or 'coucou' in elocution or 'io' in elocution: 
-                print(Color.yellow_bold+"Bonjour "+nom()+", comment allez-vous? ")
-        elif 'pute' in elocution:
-            print(Color.yellow_bold+"Selon le dictionaire Larousse, Une pute est une femme qui se prostitu en échange d'argent.")
+        elif 'salut' in elocution or 'bonjour' in elocution or 'coucou' in elocution or 'yo' in elocution or 'hey' in elocution or 'hello' in elocution: 
+            banner()
+            print(Color.yellow_bold+"Bonjour "+nom()+" !")
 
-        elif 'stop' in elocution or 'ferme-la' in elocution or ('ta' in elocution and ' gueule' in elocution):
-            print(Color.yellow_bold+"Au revoir")
-        
-        # except:
-        #     update('Je n\'ai pas compris...')
-        #     print(Color.yellow_bold+"Je n'ai pas compris")
-        #     time.sleep(1)
-        #     update('Appuyer pour parler')
+        elif "stop" == elocution or "exit" == elocution:
+            banner()
+            print(Color.yellow_bold+"Au revoir "+nom())
+            return

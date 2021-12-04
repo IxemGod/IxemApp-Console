@@ -1,0 +1,5 @@
+Sur Linux, MacOs et Windows avec pip :
+
+	Art : pip install art
+	
+	pyAesCrypt : pip install pyAesCrypt 
