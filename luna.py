@@ -200,22 +200,16 @@ def Luna():
             #Question personnel
 
             #Chaque ligne ont une couleur
-            #Le code couleur est Rouge, Vert, Jaune, Bleu 
+            #Le code couleur est Bleue, Blanc
             print("\n")
-            Liste_Commande = ["Heure : Affiche l'heure actuel avec la Timezone de Paris","Développeur / créateur : Affiche les infos du développeur", "config : Donne accès au paramêtre", "calc <calcule> : Effectue le calcule.", "actus/news : affiche la liste des journaux que vous pouvez ouvrir", "random <nombre1>/<nombre2> : génère un nombre aléatoire entre ces deux nombres.", "src <votre phrase> : vas faire la recherche dans votre navigateur."]
+            Liste_Commande = ["Heure : Affiche l'heure actuel avec la Timezone de Paris","Développeur / créateur : Affiche les infos du développeur", "config : Donne accès au paramêtre", "calc <calcule> : Effectue le calcule.", "actus/news : affiche la liste des journaux que vous pouvez ouvrir", "random <nombre1>/<nombre2> : génère un nombre aléatoire entre ces deux nombres.", "src <votre phrase> : vas faire la recherche dans votre navigateur.","Raconte moi une blague : affiche un blague random à partir d'une liste de 50 blagues","stop : Retourne au menu principal d'IxemApp","Montre moi la météo : Affiche la météo selon vos coordonée GPS décimale que vous aurrez renseigner au préalable en tapant config."]
             couleur = 1
             for item in Liste_Commande:
                 if couleur == 1:
-                    print(Color.red_bold+" "*5+item)
+                    print(Color.blue_bold+" "*5+item+"\n")
                     couleur+=1
                 elif couleur == 2:
-                    print(Color.green_bold+" "*5+item)
-                    couleur+=1
-                elif couleur == 3:
-                    print(Color.yellow_bold+" "*5+item)
-                    couleur+=1
-                elif couleur == 4:
-                    print(Color.blue_bold+" "*5+item)
+                    print(Color.white_bold+" "*5+item+"\n")
                     couleur=1
 
         #Question 
@@ -236,7 +230,7 @@ def Luna():
                     timestamp = int(time.time())
                     dateDeCrea = 1610060400
                     resultat = timestamp-dateDeCrea
-                    minute, heure, jours, annee = 0
+                    minute, heure, jours, annee = 0,0,0,0
                     while(resultat > 3600):
                         resultat = resultat - 3600
                         heure = heure + 1
@@ -429,13 +423,7 @@ def Luna():
                 lat = coo[0]
                 lon = coo[1]
 
-
-            if key is None:
-                # URL de test :
-                METEO_API_URL = "https://samples.openweathermap.org/data/2.5/forecast?lat=0&lon=0&appid=xxx"
-            else: 
-                # URL avec clé :
-                METEO_API_URL = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=" + key
+            METEO_API_URL = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&appid=" + key
 
 
             response = requests.get(METEO_API_URL)
@@ -446,7 +434,7 @@ def Luna():
                 datetime = prev['dt'] * 1000
                 weather = prev['weather'][0]['main']
 
-                temperature = int(prev['main']['temp'] - 273.15) # Conversion de Kelvin en °c
+                temperature = int(prev['main']['temp'] - 273.15) # Conversion de Kelvin en Celsius
                 temperature = round(temperature, 2)
                 data.append([datetime, temperature])
 

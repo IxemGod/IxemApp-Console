@@ -31,9 +31,6 @@ from jeux import *
 Truc à réglé :
 
 	Vérifié tout les calcules du convvertisseur de temps
-	Finir le mode help de Luna
-    Revenir au menu principale dans la commande Codeur 1M+
-    Demander l'âge à Luna
 
 """
 
@@ -89,7 +86,7 @@ def menu():
     elif choix == 3 or choix == "3":
         ConvertisseurTemps()
     elif choix== 4 or choix == "4":
-        
+
         Verlant()
     elif choix== 5 or choix == "5":
         Allumette()
