@@ -61,7 +61,7 @@ def Shifumi():
     def play():
         banner()
         print(Color.yellow_bold+"  1,2,3 Pièrre🤛, Feuilles🍃, Ciseaux ✂️ !\n")
-        print(Color.red_bold+"        [1] "+Color.white_bold+"Pièrres"+Color.red_bold+"       [9] "+Color.white_bold+"Feuilles"+Color.red_bold+"       [3] "+Color.white_bold+"Ciseaux")
+        print(Color.red_bold+"        [1] "+Color.white_bold+"Pièrres"+Color.red_bold+"       [2] "+Color.white_bold+"Feuilles"+Color.red_bold+"       [3] "+Color.white_bold+"Ciseaux")
 
         choix = input(Color.cyan_bold+"\n     [?]"+Color.white_bold+"Choissiez une chiffre "+Color.blue_bold)
         result = Test_Gagnant(choix)
