@@ -129,12 +129,14 @@ def traducteur_1M():
     bannier_traducteur1M()
 
 
-    #On demande la phrase à traiter.
-    phrase = input(Color.cyan_bold+"           [?]"+Color.white_bold+" Tapez votre phrase. "+Color.blue_bold)
+    
 
 
     #On test la réponse du choix de l'utilisateur / l'utilisatrice.
     if choix_CodeDecode == 1 or choix_CodeDecode == "1":
+
+        #On demande la phrase à traiter.
+        phrase = input(Color.cyan_bold+"           [?]"+Color.white_bold+" Tapez votre phrase. "+Color.blue_bold)
 
 
         if len(phrase) > 0:
@@ -158,6 +160,9 @@ def traducteur_1M():
 
     elif(choix_CodeDecode == 2 or choix_CodeDecode == "2"):
 
+        #On demande la phrase à traiter.
+        phrase = input(Color.cyan_bold+"           [?]"+Color.white_bold+" Tapez votre phrase. "+Color.blue_bold)
+
 
         if len(phrase) > 0:
             system('clear')
@@ -177,5 +182,3 @@ def traducteur_1M():
     #Si le choix entré est vide ou inexistant.
     else:
         print(Color.red_bold+"           [!]"+Color.white_bold+"Choix Inexistant.")
-        time.sleep(2)
-        traducteur_1M()

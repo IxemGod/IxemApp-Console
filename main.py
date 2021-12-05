@@ -27,14 +27,14 @@ from jeux import *
 #✅ ❌ ↗️ ↘️
 
 """
-Ajout à faire :
-
-Contact
 
 Truc à réglé :
 
 	Vérifié tout les calcules du convvertisseur de temps
 	Finir le mode help de Luna
+    Revenir au menu principale dans la commande Codeur 1M+
+    Demander l'âge à Luna
+
 """
 
 
@@ -68,7 +68,6 @@ def menu():
 
     #Affichage de l'introduction à IxemApp.
     print("    "+Color.green_bold+"Salut à toi jeune entrepreneur ! Bienvenu(e) dans IxemApp !\n")
-    # print(Color.green_bold+"       Rentrons dans le vive du sujet ! Choisi ce que tu souahite faire !\n")
 
     #Affichage des choix de programme.
     print(Color.red_bold+"            [1] "+Color.white_bold+"Traducteur 1M+"+Color.red_bold+"           [2] "+Color.white_bold+"Luna")
@@ -90,6 +89,7 @@ def menu():
     elif choix == 3 or choix == "3":
         ConvertisseurTemps()
     elif choix== 4 or choix == "4":
+        
         Verlant()
     elif choix== 5 or choix == "5":
         Allumette()
