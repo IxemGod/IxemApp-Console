@@ -27,11 +27,10 @@ from jeux import *
 #✅ ❌ ↗️ ↘️
 
 """
-
-Truc à réglé :
-
-	Vérifié tout les calcules du convvertisseur de temps
-
+ ------------------Développé par IxemGod------------
+ Pour configurer Luna avec vos information personnel,
+ tapez config dans Luna. IxemApp est en amélioration
+ constante. Sur ce, bonne utilisation à vous !
 """
 
 
