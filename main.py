@@ -86,7 +86,6 @@ def menu():
     elif choix == 3 or choix == "3":
         ConvertisseurTemps()
     elif choix== 4 or choix == "4":
-
         Verlant()
     elif choix== 5 or choix == "5":
         Allumette()
