@@ -66,7 +66,7 @@ def menu():
     print("    "+Color.green_bold+"Salut à toi jeune entrepreneur ! Bienvenu(e) dans IxemApp !\n")
 
     #Affichage des choix de programme.
-    print(Color.red_bold+"            [1] "+Color.white_bold+"Traducteur 1M+"+Color.red_bold+"           [2] "+Color.white_bold+"Luna")
+    print(Color.red_bold+"            [1] "+Color.white_bold+"Antrios"+Color.red_bold+"                  [2] "+Color.white_bold+"Luna")
     print(Color.red_bold+"            [3] "+Color.white_bold+"Convertisseur de Temps"+Color.red_bold+"   [4] "+Color.white_bold+"Traducteur Verlent")
     print(Color.red_bold+"            [5] "+Color.white_bold+"Allumêtte"+Color.red_bold+"                [6] "+Color.white_bold+"Plus ou Moins")
     print(Color.red_bold+"            [7] "+Color.white_bold+"Shifumi"+Color.red_bold+"                  [8] "+Color.white_bold+"Générateur de Mot de Passe")

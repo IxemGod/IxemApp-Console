@@ -14,7 +14,7 @@ import webbrowser
 
 
 def InfoIp():
-    url ="https://mon-ip.io"
+    url ="http://192.168.1.16:4747/video?640x480"
     IpPublique = "False"
     response = requests.get(url)
     if response.ok:

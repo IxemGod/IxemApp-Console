@@ -14,6 +14,7 @@ from datetime import datetime as dt
 import time
 from art import *
 from couleur import *
+import platform
 
 
 def data():
@@ -31,15 +32,20 @@ def extractConfig(param):
         result = result[1]
     return result
 
+def Clears():
+    if platform.system() == "Linux":
+        os.system("clear")
+    elif platform.system() == "Windows":
+        os.system("cls")
 
 
 def update(msg):
-    system('clear')
+    Clears()
     print(Color.yellow_bold+msg)
 
 
 def banner():
-    system('clear')
+    Clears()
     print(Color.pink_bold)
     tprint("Luna")
 
